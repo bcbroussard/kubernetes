@@ -43,6 +43,12 @@ cd app
 http-server -a localhost -p 8000
 ```
 
+See the dashboard UI in your web browser at:
+
+```
+http://localhost:8000/
+```
+
 ### Configuration
 #### Configuration settings
 A json file can be used by `gulp` to automatically create angular constants. This is useful for setting per environment variables such as api endpoints.
