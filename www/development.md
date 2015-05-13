@@ -45,9 +45,6 @@ cd app
 http-server -a localhost -p 8000
 ```
 
-### Serving the app in production
-https://<kubernetes-master>/static/app/
-
 ### Configuration
 #### Configuration settings
 A json file can be used by `gulp` to automatically create angular constants. This is useful for setting per environment variables such as api endpoints.
