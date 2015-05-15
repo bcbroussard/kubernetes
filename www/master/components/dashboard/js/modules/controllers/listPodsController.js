@@ -81,15 +81,17 @@ app.controller('ListPodsCtrl', [
                 });
           }
 
-          Object.keys(pod.labels)
-              .forEach(function(key) {
-                if (key == 'name') {
-                  _labels += ', ' + pod.labels[key];
-                }
-                if (key == 'uses') {
-                  _uses += ', ' + pod.labels[key];
-                }
-              });
+          if (pod.labels) {
+            Object.keys(pod.labels)
+                .forEach(function(key) {
+                  if (key == 'name') {
+                    _labels += ', ' + pod.labels[key];
+                  }
+                  if (key == 'uses') {
+                    _uses += ', ' + pod.labels[key];
+                  }
+                });
+            }
 
           $scope.content.push({
             thumb: '"assets/img/kubernetes.svg"',
