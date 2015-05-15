@@ -14,15 +14,15 @@
     var services = {
       "kind": "ServiceList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/services",
+      "selfLink": "/api/v1beta3/services",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": [
         {
           "id": "kubernetes",
           "uid": "626dd08d-ab51-11e4-8ae8-061695c59fcf",
           "creationTimestamp": "2015-02-03T03:04:36Z",
-          "selfLink": "/api/v1beta1/services/kubernetes?namespace=default",
+          "selfLink": "/api/v1beta3/services/kubernetes",
           "resourceVersion": 11,
           "namespace": "default",
           "port": 443,
@@ -37,7 +37,7 @@
           "id": "kubernetes-ro",
           "uid": "626f9584-ab51-11e4-8ae8-061695c59fcf",
           "creationTimestamp": "2015-02-03T03:04:36Z",
-          "selfLink": "/api/v1beta1/services/kubernetes-ro?namespace=default",
+          "selfLink": "/api/v1beta1/services/kubernetes-ro",
           "resourceVersion": 12,
           "namespace": "default",
           "port": 80,

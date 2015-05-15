@@ -15,9 +15,9 @@
     var replicationControllers = {
       "kind": "ReplicationControllerList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/replicationControllers",
+      "selfLink": "/api/v1beta3/replicationcontrollers",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": []
     };
 

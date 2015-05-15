@@ -14,20 +14,20 @@
     var pods = {
       "kind": "PodList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/pods",
+      "selfLink": "/api/v1beta3/pods",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": [{
         "id": "hello",
         "uid": "0fe3644e-ab53-11e4-8ae8-061695c59fcf",
         "creationTimestamp": "2015-02-03T03:16:36Z",
-        "selfLink": "/api/v1beta1/pods/hello?namespace=default",
+        "selfLink": "/api/v1beta1/pods/hello",
         "resourceVersion": 466,
         "namespace": "default",
         "labels": {"environment": "testing", "name": "hello"},
         "desiredState": {
           "manifest": {
-            "version": "v1beta2",
+            "version": "v1beta3",
             "id": "",
             "volumes": null,
             "containers": [{
@@ -40,7 +40,7 @@
             "dnsPolicy": "ClusterFirst"
           }
         },
-        "currentState": {
+        "status": {
           "manifest": {"version": "", "id": "", "volumes": null, "containers": null, "restartPolicy": {}},
           "status": "Running",
           "host": "172.31.12.204",
