@@ -651,18 +651,18 @@ app.controller('cAdvisorController', [
       k8sApi.getMinions().success(angular.bind(this, function(res) {
         $scope.minions = res;
         // console.log(res);
-        var promises = lodash.map(res.items, function(m) { return cAdvisorService.getDataForMinion(m.id); });
+        var promises = lodash.map(res.items, function(m) { return cAdvisorService.getDataForMinion(m.name); });
 
         $q.all(promises).then(
             function(dataArray) {
               lodash.each(dataArray, function(data, i) {
                 var m = res.items[i];
 
-                var maxData = maxMemCpuInfo(m.id, data.memoryData, data.cpuData, data.filesystemData);
+                var maxData = maxMemCpuInfo(m.name, data.memoryData, data.cpuData, data.filesystemData);
 
                 // console.log("maxData", maxData);
 
-                $scope.activeMinionDataById[m.id] =
+                $scope.activeMinionDataById[m.name] =
                     transformMemCpuInfo(data.memoryData, data.cpuData, data.filesystemData, maxData, m.hostIP)
               });
 
@@ -932,7 +932,7 @@ app.controller('GroupCtrl', [
         k8sApi.getPods(query).success(function(data) {
           $scope.addLabel("type", "pod", data.items);
           for (var i = 0; data.items && i < data.items.length; ++i) {
-            data.items[i].labels.host = data.items[i].currentState.host;
+            data.items[i].labels.host = data.items[i].status.host;
             list.push(data.items[i]);
           }
           barrier();
@@ -1193,10 +1193,10 @@ app.controller('ListMinionsCtrl', [
     $scope.thumbs = 'thumb';
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -1228,7 +1228,7 @@ app.controller('ListMinionsCtrl', [
                 .forEach(function(key) { _kind += minion.status.conditions[key].kind; });
           }
 
-          $scope.content.push({name: minion.id, ip: minion.hostIP, status: _kind});
+          $scope.content.push({name: minion.name, ip: minion.hostIP, status: _kind});
 
         });
 
@@ -1279,10 +1279,10 @@ app.controller('ListPodsCtrl', [
     $scope.sortable = ['pod', 'ip', 'status'];
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -1293,7 +1293,7 @@ app.controller('ListPodsCtrl', [
       $scope.loading = false;
     };
 
-    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.id; }
+    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.name; }
 
     $scope.content = [];
 
@@ -1334,13 +1334,13 @@ app.controller('ListPodsCtrl', [
             }
 
           $scope.content.push({
-            pod: pod.id,
-            ip: pod.currentState.podIP,
+            pod: pod.name,
+            ip: pod.status.podIP,
             containers: _fixComma(_containers),
             images: _fixComma(_images),
-            host: pod.currentState.host,
+            host: pod.status.host,
             labels: _fixComma(_labels) + ':' + _fixComma(_uses),
-            status: pod.currentState.status
+            status: pod.status.status
           });
 
         });
@@ -1351,7 +1351,7 @@ app.controller('ListPodsCtrl', [
     $scope.getPodRestarts = function(pod) {
       var r = null;
       var container = _.first(pod.desiredState.manifest.containers);
-      if (container) r = pod.currentState.info[container.name].restartCount;
+      if (container) r = pod.status.info[container.name].restartCount;
       return r;
     };
 
@@ -1359,7 +1359,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.podStatusClass = function(pod) {
 
-      var s = pod.currentState.status.toLowerCase();
+      var s = pod.status.status.toLowerCase();
 
       if (s == 'running' || s == 'succeeded')
         return null;
@@ -1415,10 +1415,10 @@ app.controller('ListReplicationControllersCtrl', [
     $scope.thumbs = 'thumb';
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -1462,11 +1462,11 @@ app.controller('ListReplicationControllersCtrl', [
           }
 
           $scope.content.push({
-            controller: replicationController.id,
+            controller: replicationController.name,
             containers: _name,
             images: _image,
             selector: _name_selector,
-            replicas: replicationController.currentState.replicas
+            replicas: replicationController.status.replicas
           });
 
         });
@@ -1574,7 +1574,7 @@ app.controller('ListServicesCtrl', [
             }
 
             $scope.content.push({
-              name: service.id,
+              name: service.name,
               ip: service.portalIP,
               port: service.port,
               selector: addLabel(_fixComma(_selectors), 'name='),
@@ -1689,10 +1689,10 @@ app.controller('ServiceCtrl', [
     $scope.controller.scope = $scope;
     $scope.controller.getData($routeParams.serviceId);
 
-    $scope.go = function(d) { $location.path('/dashboard/services/' + d.id); }
+    $scope.go = function(d) { $location.path('/dashboard/services/' + d.name); }
 
                 $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/services/' + d.id);
+      $location.path('/dashboard/services/' + d.name);
       e.stopPropagation();
     }
   }
@@ -2195,20 +2195,20 @@ angular.module('kubernetesApp.components.dashboard')
     var pods = {
       "kind": "PodList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/pods",
+      "selfLink": "/api/v1beta3/pods",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": [{
         "id": "hello",
         "uid": "0fe3644e-ab53-11e4-8ae8-061695c59fcf",
         "creationTimestamp": "2015-02-03T03:16:36Z",
-        "selfLink": "/api/v1beta1/pods/hello?namespace=default",
+        "selfLink": "/api/v1beta1/pods/hello",
         "resourceVersion": 466,
         "namespace": "default",
         "labels": {"environment": "testing", "name": "hello"},
         "desiredState": {
           "manifest": {
-            "version": "v1beta2",
+            "version": "v1beta3",
             "id": "",
             "volumes": null,
             "containers": [{
@@ -2221,7 +2221,7 @@ angular.module('kubernetesApp.components.dashboard')
             "dnsPolicy": "ClusterFirst"
           }
         },
-        "currentState": {
+        "status": {
           "manifest": {"version": "", "id": "", "volumes": null, "containers": null, "restartPolicy": {}},
           "status": "Running",
           "host": "172.31.12.204",
@@ -2274,9 +2274,9 @@ angular.module('kubernetesApp.components.dashboard')
     var replicationControllers = {
       "kind": "ReplicationControllerList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/replicationControllers",
+      "selfLink": "/api/v1beta3/replicationcontrollers",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": []
     };
 
@@ -2308,15 +2308,15 @@ angular.module('kubernetesApp.components.dashboard')
     var services = {
       "kind": "ServiceList",
       "creationTimestamp": null,
-      "selfLink": "/api/v1beta1/services",
+      "selfLink": "/api/v1beta3/services",
       "resourceVersion": 166552,
-      "apiVersion": "v1beta1",
+      "apiVersion": "v1beta3",
       "items": [
         {
           "id": "kubernetes",
           "uid": "626dd08d-ab51-11e4-8ae8-061695c59fcf",
           "creationTimestamp": "2015-02-03T03:04:36Z",
-          "selfLink": "/api/v1beta1/services/kubernetes?namespace=default",
+          "selfLink": "/api/v1beta3/services/kubernetes",
           "resourceVersion": 11,
           "namespace": "default",
           "port": 443,
@@ -2331,7 +2331,7 @@ angular.module('kubernetesApp.components.dashboard')
           "id": "kubernetes-ro",
           "uid": "626f9584-ab51-11e4-8ae8-061695c59fcf",
           "creationTimestamp": "2015-02-03T03:04:36Z",
-          "selfLink": "/api/v1beta1/services/kubernetes-ro?namespace=default",
+          "selfLink": "/api/v1beta1/services/kubernetes-ro",
           "resourceVersion": 12,
           "namespace": "default",
           "port": 80,

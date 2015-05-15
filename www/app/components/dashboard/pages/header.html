@@ -9,7 +9,7 @@
             <div layout="column" class="selectSubPages">
                <md-select ng-model="page" placeholder="Views" class="selectTitle">
                   <md-optgroup label="Dashboard">
-                  <md-option id="{{subpage.id}}" ng-value="subpage.value" ng-repeat="subpage in subpages | filter: {category: 'dashboard' }">{{subpage.name}}</md-option>
+                  <md-option id="{{subpage.name}}" ng-value="subpage.value" ng-repeat="subpage in subpages | filter: {category: 'dashboard' }">{{subpage.name}}</md-option>
                   </md-option-group>
                </md-select>
             </div>

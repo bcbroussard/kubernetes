@@ -93,7 +93,7 @@ app.controller('ListServicesCtrl', [
             }
 
             $scope.content.push({
-              name: service.id,
+              name: service.name,
               ip: service.portalIP,
               port: service.port,
               selector: addLabel(_fixComma(_selectors), 'name='),

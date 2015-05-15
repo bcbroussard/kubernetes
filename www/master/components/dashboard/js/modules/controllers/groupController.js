@@ -105,7 +105,7 @@ app.controller('GroupCtrl', [
         k8sApi.getPods(query).success(function(data) {
           $scope.addLabel("type", "pod", data.items);
           for (var i = 0; data.items && i < data.items.length; ++i) {
-            data.items[i].labels.host = data.items[i].currentState.host;
+            data.items[i].labels.host = data.items[i].status.host;
             list.push(data.items[i]);
           }
           barrier();

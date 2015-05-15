@@ -37,10 +37,10 @@ app.controller('ListPodsCtrl', [
     $scope.sortable = ['pod', 'ip', 'status'];
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -51,7 +51,7 @@ app.controller('ListPodsCtrl', [
       $scope.loading = false;
     };
 
-    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.id; }
+    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.name; }
 
     $scope.content = [];
 
@@ -92,13 +92,13 @@ app.controller('ListPodsCtrl', [
             }
 
           $scope.content.push({
-            pod: pod.id,
-            ip: pod.currentState.podIP,
+            pod: pod.name,
+            ip: pod.status.podIP,
             containers: _fixComma(_containers),
             images: _fixComma(_images),
-            host: pod.currentState.host,
+            host: pod.status.host,
             labels: _fixComma(_labels) + ':' + _fixComma(_uses),
-            status: pod.currentState.status
+            status: pod.status.status
           });
 
         });
@@ -109,7 +109,7 @@ app.controller('ListPodsCtrl', [
     $scope.getPodRestarts = function(pod) {
       var r = null;
       var container = _.first(pod.desiredState.manifest.containers);
-      if (container) r = pod.currentState.info[container.name].restartCount;
+      if (container) r = pod.status.info[container.name].restartCount;
       return r;
     };
 
@@ -117,7 +117,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.podStatusClass = function(pod) {
 
-      var s = pod.currentState.status.toLowerCase();
+      var s = pod.status.status.toLowerCase();
 
       if (s == 'running' || s == 'succeeded')
         return null;

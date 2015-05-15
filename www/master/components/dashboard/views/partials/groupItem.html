@@ -18,10 +18,10 @@
               <!-- title -->
               <div ng-switch on='item.labels["type"]'>
                 <div class="group-name">
-                  <a ng-switch-when='pod' ng-href="#/dashboard/pods/{{ item.id }}">{{ item.id }}</a>
-                  <a ng-switch-when='service' ng-href="#/dashboard/services/{{ item.id }}">{{ item.id }}</a>
-                  <a ng-switch-when='replicationController' ng-href="#/dashboard/replicationcontrollers/{{ item.id }}">{{ item.id }}</a>
-                  <div ng-switch-default>{{item.id}}</div>
+                  <a ng-switch-when='pod' ng-href="#/dashboard/pods/{{ item.name }}">{{ item.name }}</a>
+                  <a ng-switch-when='service' ng-href="#/dashboard/services/{{ item.name }}">{{ item.name }}</a>
+                  <a ng-switch-when='replicationController' ng-href="#/dashboard/replicationcontrollers/{{ item.name }}">{{ item.name }}</a>
+                  <div ng-switch-default>{{item.name}}</div>
                 </div>
               </div>
               <md-select ng-model="selectedFilter" ng-change="changeFilterBy(selectedFilter)" class="selectFilter">

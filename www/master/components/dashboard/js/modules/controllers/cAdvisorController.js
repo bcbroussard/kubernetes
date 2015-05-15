@@ -20,18 +20,18 @@ app.controller('cAdvisorController', [
       k8sApi.getMinions().success(angular.bind(this, function(res) {
         $scope.minions = res;
         // console.log(res);
-        var promises = lodash.map(res.items, function(m) { return cAdvisorService.getDataForMinion(m.id); });
+        var promises = lodash.map(res.items, function(m) { return cAdvisorService.getDataForMinion(m.name); });
 
         $q.all(promises).then(
             function(dataArray) {
               lodash.each(dataArray, function(data, i) {
                 var m = res.items[i];
 
-                var maxData = maxMemCpuInfo(m.id, data.memoryData, data.cpuData, data.filesystemData);
+                var maxData = maxMemCpuInfo(m.name, data.memoryData, data.cpuData, data.filesystemData);
 
                 // console.log("maxData", maxData);
 
-                $scope.activeMinionDataById[m.id] =
+                $scope.activeMinionDataById[m.name] =
                     transformMemCpuInfo(data.memoryData, data.cpuData, data.filesystemData, maxData, m.hostIP)
               });
 

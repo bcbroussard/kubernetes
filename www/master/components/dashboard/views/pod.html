@@ -18,7 +18,7 @@
           <tr>
             <td class="name">Status</td>
             <td class="value">
-              {{pod.currentState.status}} on <a ng-href="#/dashboard/groups/host/selector/host={{pod.currentState.host}}">{{pod.currentState.host}}</a>
+              {{pod.status.status}} on <a ng-href="#/dashboard/groups/host/selector/host={{pod.status.host}}">{{pod.status.host}}</a>
             </td>
           </tr>
 
@@ -32,7 +32,7 @@
           <tr>
             <td class="name">Pod Networking</td>
             <td class="value">
-              {{pod.currentState.podIP}}
+              {{pod.status.podIP}}
               <span ng-repeat="container in pod.desiredState.manifest.containers">
                     <span ng-repeat="port in container.ports">
                      : {{port.containerPort}}
@@ -44,7 +44,7 @@
           <tr>
             <td class="name">Host Networking</td>
             <td class="value">
-              {{pod.currentState.hostIP}}
+              {{pod.status.hostIP}}
               <span ng-repeat="container in pod.desiredState.manifest.containers">
                   <span ng-repeat="port in container.ports">
                     :{{port.hostPort}}
@@ -75,7 +75,7 @@
                 <tr ng-repeat="container in pod.desiredState.manifest.containers">
                   <td>{{container.name}}</td>
                   <td>{{container.image}}</td>
-                  <td>{{pod.currentState.info[container.name].restartCount}}</td>
+                  <td>{{pod.status.info[container.name].restartCount}}</td>
                 </tr>
               </table>
 

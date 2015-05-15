@@ -348,7 +348,7 @@ gulp.task('copy:shared-assets', function() {
   del.sync([build.assets], {force: true});
 
   return gulp.src(source.assets.source, {base: 'shared/assets'})
-      .pipe(expect(source.assets.source))
+      // .pipe(expect(source.assets.source))
       .pipe(gulp.dest(build.assets));
 });
 

@@ -30,10 +30,10 @@ app.controller('ServiceCtrl', [
     $scope.controller.scope = $scope;
     $scope.controller.getData($routeParams.serviceId);
 
-    $scope.go = function(d) { $location.path('/dashboard/services/' + d.id); }
+    $scope.go = function(d) { $location.path('/dashboard/services/' + d.name); }
 
                 $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/services/' + d.id);
+      $location.path('/dashboard/services/' + d.name);
       e.stopPropagation();
     }
   }

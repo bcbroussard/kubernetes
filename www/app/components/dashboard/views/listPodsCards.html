@@ -33,17 +33,17 @@
                     {{container.image}}
                   </span>
                 </div>
-                <div>Internal IP: {{pod.currentState.podIP}}</div>
+                <div>Internal IP: {{pod.status.podIP}}</div>
                 <div>
                 Labels:
                   <span ng-repeat="(label, value) in pod.labels">{{label}}={{value}}<span ng-show="!$last">, </span></span>
                 </div>
-                <div>Status: {{pod.currentState.status}}</div>
+                <div>Status: {{pod.status.status}}</div>
               </div>
               <md-grid-tile-footer>
 
-                <div class="pod-host">{{pod.currentState.host}}</div>
-                <div><a ng-href="#/dashboard/pods/{{ pod.id }}"><h3>{{ pod.id }}</h3></a></div>
+                <div class="pod-host">{{pod.status.host}}</div>
+                <div><a ng-href="#/dashboard/pods/{{ pod.name }}"><h3>{{ pod.name }}</h3></a></div>
 
               </md-grid-tile-footer>
             </md-grid-tile>

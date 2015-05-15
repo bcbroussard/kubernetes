@@ -36,10 +36,10 @@ app.controller('ListReplicationControllersCtrl', [
     $scope.thumbs = 'thumb';
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -83,11 +83,11 @@ app.controller('ListReplicationControllersCtrl', [
           }
 
           $scope.content.push({
-            controller: replicationController.id,
+            controller: replicationController.name,
             containers: _name,
             images: _image,
             selector: _name_selector,
-            replicas: replicationController.currentState.replicas
+            replicas: replicationController.status.replicas
           });
 
         });

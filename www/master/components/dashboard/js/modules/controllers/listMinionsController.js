@@ -28,10 +28,10 @@ app.controller('ListMinionsCtrl', [
     $scope.thumbs = 'thumb';
     $scope.count = 10;
 
-    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
+    $scope.go = function(d) { $location.path('/dashboard/pods/' + d.name); };
 
     $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
+      $location.path('/dashboard/pods/' + d.name);
       e.stopPropagation();
     };
 
@@ -63,7 +63,7 @@ app.controller('ListMinionsCtrl', [
                 .forEach(function(key) { _kind += minion.status.conditions[key].kind; });
           }
 
-          $scope.content.push({name: minion.id, ip: minion.hostIP, status: _kind});
+          $scope.content.push({name: minion.name, ip: minion.hostIP, status: _kind});
 
         });
 
