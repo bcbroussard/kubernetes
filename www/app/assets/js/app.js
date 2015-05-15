@@ -143,7 +143,7 @@ angular.module("kubernetesApp.config", [])
 
 .constant("ENV", {
 	"/": {
-		"k8sApiServer": "/api/v1beta2",
+		"k8sApiServer": "/api/v1beta3",
 		"k8sDataServer": "/cluster",
 		"k8sDataPollMinIntervalSec": 10,
 		"k8sDataPollMaxIntervalSec": 120,
@@ -205,7 +205,7 @@ app.controller('TabCtrl', [
       .service('cAdvisorService', ["$http", "$q", "ENV", function($http, $q, ENV) {
         var _baseUrl = function(minionIp) {
           var minionPort = ENV['/']['cAdvisorPort'] || "8081";
-          var proxy = ENV['/']['cAdvisorProxy'] || "/api/v1beta2/proxy/nodes/";
+          var proxy = ENV['/']['cAdvisorProxy'] || "/api/v1beta3/proxy/nodes/";
 
           return proxy + minionIp + ':' + minionPort + '/api/v1.0/';
         };
