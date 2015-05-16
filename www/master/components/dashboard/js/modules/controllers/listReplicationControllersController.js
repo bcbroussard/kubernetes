@@ -38,11 +38,6 @@ app.controller('ListReplicationControllersCtrl', [
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
 
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
-
     function handleError(data, status, headers, config) {
       console.log("Error (" + status + "): " + data);
       $scope.loading = false;

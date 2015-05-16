@@ -93,6 +93,7 @@
             $scope.order($scope.sortable[0], false);
             $scope.getNumber = function(num) { return new Array(num); };
             $scope.goToPage = function(page) { $scope.currentPage = page; };
+            $scope.showMore = function() { return angular.isDefined($scope.moreClick);}
           },
           templateUrl: 'views/partials/md-table.tmpl.html'
         };

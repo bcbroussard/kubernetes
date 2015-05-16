@@ -41,11 +41,6 @@ app.controller('ListPodsCtrl', [
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
 
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
-
     var orderedPodNames = [];
 
     function handleError(data, status, headers, config) {

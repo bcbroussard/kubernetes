@@ -32,9 +32,5 @@ app.controller('ServiceCtrl', [
 
     $scope.go = function(d) { $location.path('/dashboard/services/' + d.id); }
 
-                $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/services/' + d.id);
-      e.stopPropagation();
-    }
   }
 ]);

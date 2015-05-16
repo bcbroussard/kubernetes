@@ -1118,11 +1118,6 @@ app.controller('ListEventsCtrl', [
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
 
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
-
     function handleError(data, status, headers, config) {
       console.log("Error (" + status + "): " + data);
       $scope.loading = false;
@@ -1194,11 +1189,6 @@ app.controller('ListMinionsCtrl', [
     $scope.count = 10;
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
-
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
 
     function handleError(data, status, headers, config) {
       console.log("Error (" + status + "): " + data);
@@ -1282,11 +1272,6 @@ app.controller('ListPodsCtrl', [
     $scope.count = 10;
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
-
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
 
     var orderedPodNames = [];
 
@@ -1419,11 +1404,6 @@ app.controller('ListReplicationControllersCtrl', [
     $scope.count = 10;
 
     $scope.go = function(d) { $location.path('/dashboard/pods/' + d.id); };
-
-    $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/pods/' + d.id);
-      e.stopPropagation();
-    };
 
     function handleError(data, status, headers, config) {
       console.log("Error (" + status + "): " + data);
@@ -1694,10 +1674,6 @@ app.controller('ServiceCtrl', [
 
     $scope.go = function(d) { $location.path('/dashboard/services/' + d.id); }
 
-                $scope.moreClick = function(d, e) {
-      $location.path('/dashboard/services/' + d.id);
-      e.stopPropagation();
-    }
   }
 ]);
 
@@ -2143,6 +2119,7 @@ app.controller('ServiceCtrl', [
             $scope.order($scope.sortable[0], false);
             $scope.getNumber = function(num) { return new Array(num); };
             $scope.goToPage = function(page) { $scope.currentPage = page; };
+            $scope.showMore = function() { return angular.isDefined($scope.moreClick);}
           }],
           templateUrl: 'views/partials/md-table.tmpl.html'
         };
