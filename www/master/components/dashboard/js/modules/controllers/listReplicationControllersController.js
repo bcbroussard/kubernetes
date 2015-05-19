@@ -67,11 +67,11 @@ app.controller('ListReplicationControllersCtrl', [
 
           var _name = '', _image = '';
 
-          if (replicationController.desiredState.podTemplate.desiredState.manifest.containers) {
-            Object.keys(replicationController.desiredState.podTemplate.desiredState.manifest.containers)
+          if (replicationController.desiredState.podTemplate.spec.containers) {
+            Object.keys(replicationController.desiredState.podTemplate.spec.containers)
                 .forEach(function(key) {
-                  _name += replicationController.desiredState.podTemplate.desiredState.manifest.containers[key].name;
-                  _image += replicationController.desiredState.podTemplate.desiredState.manifest.containers[key].image;
+                  _name += replicationController.desiredState.podTemplate.spec.containers[key].name;
+                  _image += replicationController.desiredState.podTemplate.spec.containers[key].image;
                 });
           }
 

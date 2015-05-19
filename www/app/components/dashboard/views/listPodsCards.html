@@ -23,13 +23,13 @@
 
                 <div>
                   Containers:
-                  <span ng-repeat="container in pod.desiredState.manifest.containers">
+                  <span ng-repeat="container in pod.spec.containers">
                     {{container.name}}
                   </span>
                 </div>
                 <div>
                   Images:
-                  <span ng-repeat="container in pod.desiredState.manifest.containers">
+                  <span ng-repeat="container in pod.spec.containers">
                     {{container.image}}
                   </span>
                 </div>

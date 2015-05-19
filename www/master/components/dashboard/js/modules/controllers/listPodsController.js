@@ -71,11 +71,13 @@ app.controller('ListPodsCtrl', [
         data.items.forEach(function(pod) {
           var _containers = '', _images = '', _labels = '', _uses = '';
 
-          if (pod.desiredState.manifest) {
-            Object.keys(pod.desiredState.manifest.containers)
+          console.log("pod is", pod);
+
+          if (pod.spec) {
+            Object.keys(pod.spec.containers)
                 .forEach(function(key) {
-                  _containers += ', ' + pod.desiredState.manifest.containers[key].name;
-                  _images += ', ' + pod.desiredState.manifest.containers[key].image;
+                  _containers += ', ' + pod.spec.containers[key].name;
+                  _images += ', ' + pod.spec.containers[key].image;
                 });
           }
 
@@ -108,7 +110,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.getPodRestarts = function(pod) {
       var r = null;
-      var container = _.first(pod.desiredState.manifest.containers);
+      var container = _.first(pod.spec.containers);
       if (container) r = pod.status.info[container.name].restartCount;
       return r;
     };

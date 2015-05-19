@@ -33,7 +33,7 @@
             <td class="name">Pod Networking</td>
             <td class="value">
               {{pod.status.podIP}}
-              <span ng-repeat="container in pod.desiredState.manifest.containers">
+              <span ng-repeat="container in pod.spec.containers">
                     <span ng-repeat="port in container.ports">
                      : {{port.containerPort}}
                    </span>
@@ -45,7 +45,7 @@
             <td class="name">Host Networking</td>
             <td class="value">
               {{pod.status.hostIP}}
-              <span ng-repeat="container in pod.desiredState.manifest.containers">
+              <span ng-repeat="container in pod.spec.containers">
                   <span ng-repeat="port in container.ports">
                     :{{port.hostPort}}
                   </span>
@@ -72,7 +72,7 @@
                   <td>Image</td>
                   <td>Restarts</td>
                 </tr>
-                <tr ng-repeat="container in pod.desiredState.manifest.containers">
+                <tr ng-repeat="container in pod.spec.containers">
                   <td>{{container.name}}</td>
                   <td>{{container.image}}</td>
                   <td>{{pod.status.info[container.name].restartCount}}</td>
