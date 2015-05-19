@@ -16,7 +16,7 @@
           <div layout="row" layout-wrap>
             <div layout="row" ng-repeat="item in data">
               <!-- title -->
-              <div ng-switch on='item.labels["type"]'>
+              <div ng-switch on='item.metadata.labels["type"]'>
                 <div class="group-name">
                   <a ng-switch-when='pod' ng-href="#/dashboard/pods/{{ item.name }}">{{ item.name }}</a>
                   <a ng-switch-when='service' ng-href="#/dashboard/services/{{ item.name }}">{{ item.name }}</a>
@@ -26,7 +26,7 @@
               </div>
               <md-select ng-model="selectedFilter" ng-change="changeFilterBy(selectedFilter)" class="selectFilter">
                 <md-optgroup label="FILTER">
-                  <md-option ng-value="'{{key}}={{value}}'" ng-repeat="(key, value) in item.labels">{{key}}: {{value}}</md-option>
+                  <md-option ng-value="'{{key}}={{value}}'" ng-repeat="(key, value) in item.metadata.labels">{{key}}: {{value}}</md-option>
                   </md-option-group>
                 </md-optgroup>
               </md-select>

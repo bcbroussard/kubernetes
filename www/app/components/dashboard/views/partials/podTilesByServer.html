@@ -9,7 +9,7 @@
     <md-grid-tile-header class="clear-bg">
 
       <div layout="row">
-        <div class="labels"><span ng-repeat="(label, value) in otherLabels(pod.labels)">{{label}}: {{value}}<span ng-show="!$last">, </span></span></div>
+        <div class="labels"><span ng-repeat="(label, value) in otherLabels(pod.metadata.labels)">{{label}}: {{value}}<span ng-show="!$last">, </span></span></div>
 
         <div flex="20" class="restarts" ng-show="getPodRestarts(pod) > 0">
           <md-button class="md-fab restart-button">
@@ -25,7 +25,7 @@
     </div>
     <md-grid-tile-footer>
 
-      <div class="pod-host">{{pod.labels.name}}</div>
+      <div class="pod-host">{{pod.metadata.labels.name}}</div>
       <div><a ng-href="#/dashboard/pods/{{ pod.id }}"><h3>{{ pod.id }}</h3></a></div>
 
     </md-grid-tile-footer>

@@ -40,7 +40,7 @@
           <tr>
             <td class="name">Labels</td>
             <td class="value">
-              <div ng-repeat="(label, value) in replicationController.labels">
+              <div ng-repeat="(label, value) in replicationController.metadata.labels">
                   {{label}}: {{value}}
               </div>
             </td>

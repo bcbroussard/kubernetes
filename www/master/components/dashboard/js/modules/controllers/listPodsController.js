@@ -51,7 +51,7 @@ app.controller('ListPodsCtrl', [
       $scope.loading = false;
     };
 
-    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.name; }
+    function getPodName(pod) { return _.has(pod.metadata.labels, 'name') ? pod.metadata.labels.name : pod.name; }
 
     $scope.content = [];
 
@@ -81,14 +81,14 @@ app.controller('ListPodsCtrl', [
                 });
           }
 
-          if (pod.labels) {
-            Object.keys(pod.labels)
+          if (pod.metadata.labels) {
+            Object.keys(pod.metadata.labels)
                 .forEach(function(key) {
                   if (key == 'name') {
-                    _labels += ', ' + pod.labels[key];
+                    _labels += ', ' + pod.metadata.labels[key];
                   }
                   if (key == 'uses') {
-                    _uses += ', ' + pod.labels[key];
+                    _uses += ', ' + pod.metadata.labels[key];
                   }
                 });
             }

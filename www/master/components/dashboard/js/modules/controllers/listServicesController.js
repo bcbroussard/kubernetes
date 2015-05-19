@@ -66,17 +66,17 @@ app.controller('ListServicesCtrl', [
 
             var _name = '', _uses = '', _component = '', _provider = '';
 
-            if (service.labels !== null && typeof service.labels === 'object') {
-              Object.keys(service.labels)
+            if (service.metadata.labels !== null && typeof service.metadata.labels === 'object') {
+              Object.keys(service.metadata.labels)
                   .forEach(function(key) {
                     if (key == 'name') {
-                      _name += ',' + service.labels[key];
+                      _name += ',' + service.metadata.labels[key];
                     }
                     if (key == 'component') {
-                      _component += ',' + service.labels[key];
+                      _component += ',' + service.metadata.labels[key];
                     }
                     if (key == 'provider') {
-                      _provider += ',' + service.labels[key];
+                      _provider += ',' + service.metadata.labels[key];
                     }
                   });
             }

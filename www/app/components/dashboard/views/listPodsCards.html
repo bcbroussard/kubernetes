@@ -36,7 +36,7 @@
                 <div>Internal IP: {{pod.status.podIP}}</div>
                 <div>
                 Labels:
-                  <span ng-repeat="(label, value) in pod.labels">{{label}}={{value}}<span ng-show="!$last">, </span></span>
+                  <span ng-repeat="(label, value) in pod.metadata.labels">{{label}}={{value}}<span ng-show="!$last">, </span></span>
                 </div>
                 <div>Status: {{pod.status.status}}</div>
               </div>
