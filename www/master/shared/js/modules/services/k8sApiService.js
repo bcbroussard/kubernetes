@@ -2,11 +2,16 @@ app.provider('k8sApi',
              function() {
 
                var urlBase = '';
+               var _namespace = 'default';
 
                this.setUrlBase = function(value) { urlBase = value; };
 
+               this.setNamespace = function(value) { urlBase = value; };
+               this.getNamespace = function() { return _namespace; };
+
                var _get = function($http, baseUrl, query) {
                  var _fullUrl = baseUrl;
+
                  if (query !== undefined) {
                    _fullUrl += '/' + query;
                  }
@@ -17,19 +22,19 @@ app.provider('k8sApi',
                this.$get = function($http, $q) {
                  var api = {};
 
-                 api.getUrlBase = function() { return urlBase; };
+                 api.getUrlBase = function() { return urlBase + '/namespaces/' + _namespace; };
 
-                 api.getPods = function(query) { return _get($http, urlBase + '/pods', query); };
+                 api.getPods = function(query) { return _get($http, api.getUrlBase() + '/pods', query); };
 
-                 api.getMinions = function(query) { return _get($http, urlBase + '/minions', query); };
+                 api.getMinions = function(query) { return _get($http, api.getUrlBase() + '/minions', query); };
 
-                 api.getServices = function(query) { return _get($http, urlBase + '/services', query); };
+                 api.getServices = function(query) { return _get($http, api.getUrlBase() + '/services', query); };
 
                  api.getReplicationControllers = function(query) {
-                   return _get($http, urlBase + '/replicationControllers', query)
+                   return _get($http, api.getUrlBase() + '/replicationControllers', query)
                  };
 
-                 api.getEvents = function(query) { return _get($http, urlBase + '/events', query); };
+                 api.getEvents = function(query) { return _get($http, api.getUrlBase() + '/events', query); };
 
                  return api;
                };

@@ -51,7 +51,7 @@ app.controller('ListPodsCtrl', [
       $scope.loading = false;
     };
 
-    function getPodName(pod) { return _.has(pod.metadata.labels, 'name') ? pod.metadata.labels.name : pod.name; }
+    function getPodName(pod) { return _.has(pod.metadata.labels, 'name') ? pod.metadata.labels.name : pod.metadata.name; }
 
     $scope.content = [];
 
@@ -70,8 +70,6 @@ app.controller('ListPodsCtrl', [
 
         data.items.forEach(function(pod) {
           var _containers = '', _images = '', _labels = '', _uses = '';
-
-          console.log("pod is", pod);
 
           if (pod.spec) {
             Object.keys(pod.spec.containers)
@@ -94,13 +92,13 @@ app.controller('ListPodsCtrl', [
             }
 
           $scope.content.push({
-            pod: pod.name,
+            pod: pod.metadata.name,
             ip: pod.status.podIP,
             containers: _fixComma(_containers),
             images: _fixComma(_images),
-            host: pod.status.host,
+            host: pod.status.hostIP,
             labels: _fixComma(_labels) + ':' + _fixComma(_uses),
-            status: pod.status.status
+            status: pod.status.phase
           });
 
         });
@@ -119,7 +117,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.podStatusClass = function(pod) {
 
-      var s = pod.status.status.toLowerCase();
+      var s = pod.status.phase.toLowerCase();
 
       if (s == 'running' || s == 'succeeded')
         return null;

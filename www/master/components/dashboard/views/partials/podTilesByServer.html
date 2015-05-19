@@ -21,12 +21,12 @@
     </md-grid-tile-header>
     <div class="inner-box">
 
-      <div ng-show="podStatusClass(pod)">Status: {{pod.status.status}}</div>
+      <div ng-show="podStatusClass(pod)">Status: {{pod.status.phase}}</div>
     </div>
     <md-grid-tile-footer>
 
       <div class="pod-host">{{pod.metadata.labels.name}}</div>
-      <div><a ng-href="#/dashboard/pods/{{ pod.id }}"><h3>{{ pod.id }}</h3></a></div>
+      <div><a ng-href="#/dashboard/pods/{{ pod.metadata.name }}"><h3>{{ pod.metadata.name }}</h3></a></div>
 
     </md-grid-tile-footer>
   </md-grid-tile>

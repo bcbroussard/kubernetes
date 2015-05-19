@@ -398,11 +398,16 @@ app.provider('k8sApi',
              function() {
 
                var urlBase = '';
+               var _namespace = 'default';
 
                this.setUrlBase = function(value) { urlBase = value; };
 
+               this.setNamespace = function(value) { urlBase = value; };
+               this.getNamespace = function() { return _namespace; };
+
                var _get = function($http, baseUrl, query) {
                  var _fullUrl = baseUrl;
+
                  if (query !== undefined) {
                    _fullUrl += '/' + query;
                  }
@@ -413,19 +418,19 @@ app.provider('k8sApi',
                this.$get = ["$http", "$q", function($http, $q) {
                  var api = {};
 
-                 api.getUrlBase = function() { return urlBase; };
+                 api.getUrlBase = function() { return urlBase + '/namespaces/' + _namespace; };
 
-                 api.getPods = function(query) { return _get($http, urlBase + '/pods', query); };
+                 api.getPods = function(query) { return _get($http, api.getUrlBase() + '/pods', query); };
 
-                 api.getMinions = function(query) { return _get($http, urlBase + '/minions', query); };
+                 api.getMinions = function(query) { return _get($http, api.getUrlBase() + '/minions', query); };
 
-                 api.getServices = function(query) { return _get($http, urlBase + '/services', query); };
+                 api.getServices = function(query) { return _get($http, api.getUrlBase() + '/services', query); };
 
                  api.getReplicationControllers = function(query) {
-                   return _get($http, urlBase + '/replicationControllers', query)
+                   return _get($http, api.getUrlBase() + '/replicationControllers', query)
                  };
 
-                 api.getEvents = function(query) { return _get($http, urlBase + '/events', query); };
+                 api.getEvents = function(query) { return _get($http, api.getUrlBase() + '/events', query); };
 
                  return api;
                }];
@@ -932,7 +937,7 @@ app.controller('GroupCtrl', [
         k8sApi.getPods(query).success(function(data) {
           $scope.addLabel("type", "pod", data.items);
           for (var i = 0; data.items && i < data.items.length; ++i) {
-            data.items[i].labels.host = data.items[i].status.host;
+            data.items[i].metadata.labels.host = data.items[i].status.hostIP;
             list.push(data.items[i]);
           }
           barrier();
@@ -963,10 +968,10 @@ app.controller('GroupCtrl', [
         return;
       }
       for (var i = 0; i < items.length; i++) {
-        if (!items[i].labels) {
-          items[i].labels = [];
+        if (!items[i].metadata.labels) {
+          items[i].metadata.labels = [];
         }
-        items[i].labels[key] = value;
+        items[i].metadata.labels[key] = value;
       }
     };
 
@@ -976,7 +981,7 @@ app.controller('GroupCtrl', [
         "kind": "grouping"
       };
       for (var i = 0; i < items.length; i++) {
-        key = items[i].labels[$scope.groupBy[index]];
+        key = items[i].metadata.labels[$scope.groupBy[index]];
         if (!key) {
           key = "";
         }
@@ -1025,7 +1030,7 @@ app.controller('GroupCtrl', [
     function buildGroupByOptions() {
       var g = $scope.groups;
       var options = getDefaultGroupByOptions();
-      var newOptions = _.map(g.items, function(vals) { return _.map(vals, function(v) { return _.keys(v.labels); }); });
+      var newOptions = _.map(g.items, function(vals) { return _.map(vals, function(v) { return _.keys(v.metadata.labels); }); });
       newOptions =
           _.reject(_.uniq(_.flattenDeep(newOptions)), function(o) { return o == 'name' || o == 'type' || o == ""; });
       newOptions = _.map(newOptions, function(o) {
@@ -1293,7 +1298,7 @@ app.controller('ListPodsCtrl', [
       $scope.loading = false;
     };
 
-    function getPodName(pod) { return _.has(pod.labels, 'name') ? pod.labels.name : pod.name; }
+    function getPodName(pod) { return _.has(pod.metadata.labels, 'name') ? pod.metadata.labels.name : pod.metadata.name; }
 
     $scope.content = [];
 
@@ -1313,34 +1318,34 @@ app.controller('ListPodsCtrl', [
         data.items.forEach(function(pod) {
           var _containers = '', _images = '', _labels = '', _uses = '';
 
-          if (pod.desiredState.manifest) {
-            Object.keys(pod.desiredState.manifest.containers)
+          if (pod.spec) {
+            Object.keys(pod.spec.containers)
                 .forEach(function(key) {
-                  _containers += ', ' + pod.desiredState.manifest.containers[key].name;
-                  _images += ', ' + pod.desiredState.manifest.containers[key].image;
+                  _containers += ', ' + pod.spec.containers[key].name;
+                  _images += ', ' + pod.spec.containers[key].image;
                 });
           }
 
-          if (pod.labels) {
-            Object.keys(pod.labels)
+          if (pod.metadata.labels) {
+            Object.keys(pod.metadata.labels)
                 .forEach(function(key) {
                   if (key == 'name') {
-                    _labels += ', ' + pod.labels[key];
+                    _labels += ', ' + pod.metadata.labels[key];
                   }
                   if (key == 'uses') {
-                    _uses += ', ' + pod.labels[key];
+                    _uses += ', ' + pod.metadata.labels[key];
                   }
                 });
             }
 
           $scope.content.push({
-            pod: pod.name,
+            pod: pod.metadata.name,
             ip: pod.status.podIP,
             containers: _fixComma(_containers),
             images: _fixComma(_images),
-            host: pod.status.host,
+            host: pod.status.hostIP,
             labels: _fixComma(_labels) + ':' + _fixComma(_uses),
-            status: pod.status.status
+            status: pod.status.phase
           });
 
         });
@@ -1350,7 +1355,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.getPodRestarts = function(pod) {
       var r = null;
-      var container = _.first(pod.desiredState.manifest.containers);
+      var container = _.first(pod.spec.containers);
       if (container) r = pod.status.info[container.name].restartCount;
       return r;
     };
@@ -1359,7 +1364,7 @@ app.controller('ListPodsCtrl', [
 
     $scope.podStatusClass = function(pod) {
 
-      var s = pod.status.status.toLowerCase();
+      var s = pod.status.phase.toLowerCase();
 
       if (s == 'running' || s == 'succeeded')
         return null;
@@ -1446,11 +1451,11 @@ app.controller('ListReplicationControllersCtrl', [
 
           var _name = '', _image = '';
 
-          if (replicationController.desiredState.podTemplate.desiredState.manifest.containers) {
-            Object.keys(replicationController.desiredState.podTemplate.desiredState.manifest.containers)
+          if (replicationController.desiredState.podTemplate.spec.containers) {
+            Object.keys(replicationController.desiredState.podTemplate.spec.containers)
                 .forEach(function(key) {
-                  _name += replicationController.desiredState.podTemplate.desiredState.manifest.containers[key].name;
-                  _image += replicationController.desiredState.podTemplate.desiredState.manifest.containers[key].image;
+                  _name += replicationController.desiredState.podTemplate.spec.containers[key].name;
+                  _image += replicationController.desiredState.podTemplate.spec.containers[key].image;
                 });
           }
 
@@ -1547,17 +1552,17 @@ app.controller('ListServicesCtrl', [
 
             var _name = '', _uses = '', _component = '', _provider = '';
 
-            if (service.labels !== null && typeof service.labels === 'object') {
-              Object.keys(service.labels)
+            if (service.metadata.labels !== null && typeof service.metadata.labels === 'object') {
+              Object.keys(service.metadata.labels)
                   .forEach(function(key) {
                     if (key == 'name') {
-                      _name += ',' + service.labels[key];
+                      _name += ',' + service.metadata.labels[key];
                     }
                     if (key == 'component') {
-                      _component += ',' + service.labels[key];
+                      _component += ',' + service.metadata.labels[key];
                     }
                     if (key == 'provider') {
-                      _provider += ',' + service.labels[key];
+                      _provider += ',' + service.metadata.labels[key];
                     }
                   });
             }
