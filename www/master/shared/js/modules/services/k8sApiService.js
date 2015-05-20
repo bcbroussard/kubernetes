@@ -26,7 +26,7 @@ app.provider('k8sApi',
 
                  api.getPods = function(query) { return _get($http, api.getUrlBase() + '/pods', query); };
 
-                 api.getMinions = function(query) { return _get($http, api.getUrlBase() + '/minions', query); };
+                 api.getMinions = function(query) { return _get($http, urlBase + '/nodes', query); };
 
                  api.getServices = function(query) { return _get($http, api.getUrlBase() + '/services', query); };
 
