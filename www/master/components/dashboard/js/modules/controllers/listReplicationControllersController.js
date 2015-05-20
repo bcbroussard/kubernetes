@@ -78,7 +78,7 @@ app.controller('ListReplicationControllersCtrl', [
           var _selectors = '';
 
           if (replicationController.spec.selector) {
-            _selectors = _.map(replicationController.spec.selector, function(v, k) { return k + ': ' + v }).join(', ');
+            _selectors = _.map(replicationController.spec.selector, function(v, k) { return k + '=' + v }).join(', ');
           }
 
           $scope.content.push({

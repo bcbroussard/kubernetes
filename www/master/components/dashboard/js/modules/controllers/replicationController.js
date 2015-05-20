@@ -28,5 +28,7 @@ app.controller('ReplicationControllerCtrl', [
     $scope.controller.k8sApi = k8sApi;
     $scope.controller.scope = $scope;
     $scope.controller.getData($routeParams.replicationControllerId);
+
+    $scope.getSelectorUrlFragment = function(sel){ return _.map(sel, function(v, k) { return k + '=' + v }).join(','); };
   }
 ]);
