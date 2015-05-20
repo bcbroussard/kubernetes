@@ -64,7 +64,7 @@ app.controller('ListMinionsCtrl', [
           }
 
 
-          $scope.content.push({name: minion.metadata.name, addresses: _.map(minion.status.addresses, function(a) { return a.address }).join('\n'), status: _statusType});
+          $scope.content.push({name: minion.metadata.name, addresses: _.map(minion.status.addresses, function(a) { return a.address }).join(', '), status: _statusType});
         });
 
       }).error($scope.handleError);

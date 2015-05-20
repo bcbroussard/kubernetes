@@ -67,26 +67,25 @@ app.controller('ListReplicationControllersCtrl', [
 
           var _name = '', _image = '';
 
-          if (replicationController.desiredState.podTemplate.spec.containers) {
-            Object.keys(replicationController.desiredState.podTemplate.spec.containers)
+          if (replicationController.spec.template.spec.containers) {
+            Object.keys(replicationController.spec.template.spec.containers)
                 .forEach(function(key) {
-                  _name += replicationController.desiredState.podTemplate.spec.containers[key].name;
-                  _image += replicationController.desiredState.podTemplate.spec.containers[key].image;
+                  _name += replicationController.spec.template.spec.containers[key].name;
+                  _image += replicationController.spec.template.spec.containers[key].image;
                 });
           }
 
-          var _name_selector = '';
+          var _selectors = '';
 
-          if (replicationController.desiredState.replicaSelector) {
-            Object.keys(replicationController.desiredState.replicaSelector)
-                .forEach(function(key) { _name_selector += replicationController.desiredState.replicaSelector[key]; });
+          if (replicationController.spec.selector) {
+            _selectors = _.map(replicationController.spec.selector, function(v, k) { return k + ': ' + v }).join(', ');
           }
 
           $scope.content.push({
-            controller: replicationController.name,
+            controller: replicationController.metadata.name,
             containers: _name,
             images: _image,
-            selector: _name_selector,
+            selector: _selectors,
             replicas: replicationController.status.replicas
           });
 

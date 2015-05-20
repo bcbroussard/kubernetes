@@ -31,7 +31,7 @@ app.provider('k8sApi',
                  api.getServices = function(query) { return _get($http, api.getUrlBase() + '/services', query); };
 
                  api.getReplicationControllers = function(query) {
-                   return _get($http, api.getUrlBase() + '/replicationControllers', query)
+                   return _get($http, api.getUrlBase() + '/replicationcontrollers', query)
                  };
 
                  api.getEvents = function(query) { return _get($http, api.getUrlBase() + '/events', query); };
