@@ -8,7 +8,7 @@
       </div>
 
       <div class="heading">
-        <span class="label">Pod:</span>
+        <span class="label">Name:</span>
         <span>{{pod.metadata.name}}</span>
       </div>
 
@@ -30,29 +30,32 @@
           </tr>
 
           <tr>
-            <td class="name">Pod Networking</td>
-            <td class="value">
-              {{pod.status.podIP}}
-              <span ng-repeat="container in pod.spec.containers">
-                    <span ng-repeat="port in container.ports">
-                      <span ng-show="port.containerPort">
-                        : {{port.containerPort}}
-                      </span>
-                   </span>
-              </span>
-            </td>
-          </tr>
-
-          <tr>
             <td class="name">Host Networking</td>
             <td class="value">
-              {{pod.status.hostIP}}
+              {{pod.spec.host}}/{{pod.status.hostIP}}
               <span ng-repeat="container in pod.spec.containers">
                   <span ng-repeat="port in container.ports">
                     <span ng-show="port.hostPort">
                         : {{port.hostPort}}
                     </span>
                   </span>
+              </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="name">Pod Networking</td>
+            <td class="value">
+              {{pod.status.podIP}}
+              <span ng-show="pod.spec.containers">
+                using ports -
+                <span ng-repeat="container in pod.spec.containers">
+                    <span ng-repeat="port in container.ports">
+                      <span ng-show="port.containerPort">
+                        {{port.name}}: {{port.containerPort}}
+                      </span>
+                   </span>
+                </span>
               </span>
             </td>
           </tr>
@@ -74,14 +77,37 @@
                 <tr>
                   <td>Name</td>
                   <td>Image</td>
+                  <td>Ready</td>
                   <td>Restarts</td>
+                  <td>State</td>
                 </tr>
-                <tr ng-repeat="container in pod.spec.containers">
+                <tr ng-repeat="container in pod.status.containerStatuses">
                   <td>{{container.name}}</td>
                   <td>{{container.image}}</td>
-                  <td>{{pod.status.info[container.name].restartCount}}</td>
+                  <td>{{container.ready}}</td>
+                  <td>{{container.restartCount}}</td>
+                  <td>
+                    <div ng-show="container.state.running">
+                      <div class="run-state">Running</div>
+                      <div class="run-messages">Started: {{container.state.running.startedAt | date:'medium'}}</div>
+                    </div>
+                    <div ng-show="container.state.waiting">
+                      <div class="run-state">Wating</div>
+                      <div class="run-messages" ng-show="container.state.waiting.reason">Reason: {{container.state.waiting.reason}}</div>
+                    </div>
+                    <div ng-show="container.state.termination">
+                      <div class="run-state">Terminated</div>
+                      <div class="run-messages" ng-show="container.state.termination.reason">Reason: {{container.state.termination.reason}}</div>
+                      <div class="run-messages" ng-show="container.state.termination.message">Message: {{container.state.termination.message}}</div>
+                      <div class="run-messages">Exit Code: {{container.state.termination.exitCode}}</div>
+                      <div class="run-messages" ng-show="container.state.termination.signal">Signal: {{container.state.termination.signal}}</div>
+                      <div class="run-messages">Started: {{container.state.running.startedAt | date:'medium'}}</div>
+                      <div class="run-messages">Finished: {{container.state.running.finishedAt | date:'medium'}}</div>
+                    </div>
+                  </td>
                 </tr>
               </table>
+
 
             </td>
           </tr>
