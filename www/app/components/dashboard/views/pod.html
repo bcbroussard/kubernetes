@@ -33,13 +33,6 @@
             <td class="name">Host Networking</td>
             <td class="value">
               {{pod.spec.host}}/{{pod.status.hostIP}}
-              <span ng-repeat="container in pod.spec.containers">
-                  <span ng-repeat="port in container.ports">
-                    <span ng-show="port.hostPort">
-                        : {{port.hostPort}}
-                    </span>
-                  </span>
-              </span>
             </td>
           </tr>
 
